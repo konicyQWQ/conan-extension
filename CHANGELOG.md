@@ -2,6 +2,12 @@
 
 All notable changes to the "conan-extension" extension will be documented in this file.
 
+## [0.0.2] - 2023.6.2
+
+### Added
+
+- add VScode Extension icon
+
 ## [0.0.1] - 2023.6.2
 
 ### Added
