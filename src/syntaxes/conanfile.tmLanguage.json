@@ -1,0 +1,169 @@
+{
+    "name": "Conanfile Syntax",
+    "scopeName": "source.conanfile",
+    "patterns": [
+        {
+            "include": "#requires"
+        },
+        {
+            "include": "#tool_requires"
+        },
+        {
+            "include": "#test_requires"
+        },
+        {
+            "include": "#generators"
+        },
+        {
+            "include": "#options"
+        },
+        {
+            "include": "#layout"
+        }
+    ],
+    "repository": {
+        "package-and-version": {
+            "match": "(\\w+)/(\\d+(?:.\\d+)*)(#revision\\d+)?$",
+            "captures": {
+                "1": {
+                    "name": "string.name.package"
+                },
+                "2": {
+                    "name": "constant.numeric.version.package"
+                },
+                "3": {
+                    "name": "markup.italic.revision.package"
+                }
+            }
+        },
+        "package-and-range-version": {
+            "match": "(\\w+)/\\[>(\\d+(?:.\\d+)*)(?:,<(\\d+(?:.\\d+)*))?\\]$",
+            "captures": {
+                "1": {
+                    "name": "string.name.package"
+                },
+                "2": {
+                    "name": "constant.numeric.version.minimum.package"
+                },
+                "3": {
+                    "name": "constant.numeric.version.maximum.package"
+                }
+            }
+        },
+        "generators-keyword": {
+            "match": "CMakeDeps|CMakeToolchain",
+            "name": "keyword.generators-keyword"
+        },
+        "option": {
+            "match": "(\\w*)\\*:(\\w*)=(\\w*)",
+            "captures": {
+                "1": {
+                    "name": "string.name.package"
+                },
+                "2": {
+                    "name": "string.name.option"
+                },
+                "3": {
+                    "name": "markup.raw.value"
+                }
+            }
+        },
+        "layout-keyword": {
+            "match": "cmake_layout|vs_layout|bazel_layout",
+            "name": "keyword.layout-keyword"
+        },
+        "requires": {
+            "begin": "\\[requires\\]",
+            "end": "(?=\\[requires\\]|\\[generators\\]|\\[tool_requires\\]|\\[test_requires\\]|\\[options\\]|\\[layout\\]|\\z)",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.control.requires"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#package-and-version"
+                },
+                {
+                    "include": "#package-and-range-version"
+                }
+            ]
+        },
+        "tool_requires": {
+            "begin": "\\[tool_requires\\]",
+            "end": "(?=\\[requires\\]|\\[generators\\]|\\[tool_requires\\]|\\[test_requires\\]|\\[options\\]|\\[layout\\]|\\z)",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.control.tool_requires"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#package-and-version"
+                },
+                {
+                    "include": "#package-and-range-version"
+                }
+            ]
+        },
+        "test_requires": {
+            "begin": "\\[test_requires\\]",
+            "end": "(?=\\[requires\\]|\\[generators\\]|\\[tool_requires\\]|\\[test_requires\\]|\\[options\\]|\\[layout\\]|\\z)",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.control.test_requires"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#package-and-version"
+                },
+                {
+                    "include": "#package-and-range-version"
+                }
+            ]
+        },
+        "generators": {
+            "begin": "\\[generators\\]",
+            "end": "(?=\\[requires\\]|\\[generators\\]|\\[tool_requires\\]|\\[test_requires\\]|\\[options\\]|\\[layout\\]|\\z)",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.control.generators"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#generators-keyword"
+                }
+            ]
+        },
+        "options": {
+            "begin": "\\[options\\]",
+            "end": "(?=\\[requires\\]|\\[generators\\]|\\[tool_requires\\]|\\[test_requires\\]|\\[options\\]|\\[layout\\]|\\z)",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.control.options"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#option"
+                }
+            ]
+        },
+        "layout": {
+            "begin": "\\[layout\\]",
+            "end": "(?=\\[requires\\]|\\[generators\\]|\\[tool_requires\\]|\\[test_requires\\]|\\[options\\]|\\[layout\\]|\\z)",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.control.layout"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#layout-keyword"
+                }
+            ]
+        }
+    }
+}
