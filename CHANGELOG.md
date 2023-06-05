@@ -2,6 +2,12 @@
 
 All notable changes to the "conan-extension" extension will be documented in this file.
 
+## [0.0.3] 2023.6.4
+
+### Fix
+
+- fix syntax highlight not work.
+
 ## [0.0.2] - 2023.6.2
 
 ### Added

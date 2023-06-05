@@ -1,5 +1,6 @@
 {
-    "name": "Conanfile Syntax",
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "conanfile",
     "scopeName": "source.conanfile",
     "patterns": [
         {
