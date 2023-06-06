@@ -1,37 +1,37 @@
-import * as vscode from 'vscode'
+import * as vscode from 'vscode';
 import { cp_exec } from '../utils';
 import { StatusBar } from './status';
 import { Env } from './env';
 
-export const InstallCommandID = 'conan.install'
+export const installCommandID = 'conan.install';
 
-function registerInstallCommand(context: vscode.ExtensionContext, StatusBar: StatusBar, env: Env) {
-    context.subscriptions.push(vscode.commands.registerCommand(InstallCommandID, async () => {
-        if (env.workspacePath && !StatusBar.loading) {
-            const outputChannel = vscode.window.createOutputChannel('conan install')
-            outputChannel.show()
+function registerInstallCommand(context: vscode.ExtensionContext, statusBar: StatusBar, env: Env) {
+    context.subscriptions.push(vscode.commands.registerCommand(installCommandID, async () => {
+        if (env.workspacePath && !statusBar.loading) {
+            const outputChannel = vscode.window.createOutputChannel('conan install');
+            outputChannel.show();
     
             try {
-                StatusBar.setStatus({ loading: true });
+                statusBar.setStatus({ loading: true });
                 await cp_exec(`conan install . --output-folder=build --build=missing`, {
                     cwd: env.workspacePath,
                     channel: outputChannel,
-                })
-                vscode.window.showInformationMessage('Conan install success.')
+                });
+                vscode.window.showInformationMessage('Conan install success.');
             } catch (e) {
-                vscode.window.showErrorMessage('Conan install failed. Please check output infomation.')
+                vscode.window.showErrorMessage('Conan install failed. Please check output infomation.');
             } finally {
-                StatusBar.setStatus({ loading: false })
+                statusBar.setStatus({ loading: false });
             }
         }
-    }))
+    }));
 }
 
-export async function registerCommand(context: vscode.ExtensionContext, StatusBar: StatusBar, env: Env) {
+export async function registerCommand(context: vscode.ExtensionContext, statusBar: StatusBar, env: Env) {
     try {
-        await env.checkConanEnv(context)
-        registerInstallCommand(context, StatusBar, env)
+        await env.getConanEnv(context);
+        registerInstallCommand(context, statusBar, env);
     } catch {
-        vscode.window.showErrorMessage('Conan executable not found.')
+        vscode.window.showErrorMessage('Conan executable not found.');
     }
 }

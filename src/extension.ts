@@ -6,23 +6,24 @@ import { Env } from './helper/env';
 
 export function activate(context: vscode.ExtensionContext) {
     // conanfile.txt
-    // - syntax highlight (src/syntaxes/conanfile.tmLanguage.json)
+    // - syntax highlight (./syntaxes/conanfile.tmLanguage.json)
     // - auto completion
-    addAutoCompletion(context)
+    addAutoCompletion(context);
 
     // conan statusbar
     // - click to install 
     // - show loading icon when installing
-    const statusBar = new StatusBar()
+    const statusBar = new StatusBar();
     context.subscriptions.push(statusBar.statusBarItem);
 
     // conan env
     // - workspace path
+    // - conan version
     const env = new Env(context);
 
     // conan command
     // - conan install
-    registerCommand(context, statusBar, env)
+    registerCommand(context, statusBar, env);
 }
 
 export function deactivate() { }
