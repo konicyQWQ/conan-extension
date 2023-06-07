@@ -2,7 +2,7 @@
   "name": "conan-extension",
   "displayName": "conan-extension",
   "description": "conan v2.0 VScode Extension",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "repository": "https://github.com/konicyQWQ/conan-extension",
   "icon": "img/icon.png",
   "publisher": "konicy",
@@ -38,7 +38,20 @@
         "scopeName": "source.conanfile",
         "path": "./syntaxes/conanfile.tmLanguage.json"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Conan-Extension Configuration",
+      "properties": {
+        "conan-extension.installArgs": {
+          "type": "array",
+          "default": [
+            "-of build",
+            "-b missing"
+          ],
+          "description": "custom arguments when running conan install"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

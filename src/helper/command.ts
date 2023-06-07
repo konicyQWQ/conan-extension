@@ -5,6 +5,11 @@ import { Env } from './env';
 
 export const installCommandID = 'conan.install';
 
+function produceInstallCommandString(path: string, env: Env) {
+    const args = env.getConfig('installArgs');
+    return `conan install ${path} ${args?.join(' ')}`;
+}
+
 function registerInstallCommand(context: vscode.ExtensionContext, statusBar: StatusBar, env: Env) {
     context.subscriptions.push(vscode.commands.registerCommand(installCommandID, async () => {
         if (env.workspacePath && !statusBar.loading) {
@@ -13,7 +18,7 @@ function registerInstallCommand(context: vscode.ExtensionContext, statusBar: Sta
     
             try {
                 statusBar.setStatus({ loading: true });
-                await cp_exec(`conan install . --output-folder=build --build=missing`, {
+                await cp_exec(produceInstallCommandString(env.workspacePath, env), {
                     cwd: env.workspacePath,
                     channel: outputChannel,
                 });
@@ -31,7 +36,5 @@ export async function registerCommand(context: vscode.ExtensionContext, statusBa
     try {
         await env.getConanEnv(context);
         registerInstallCommand(context, statusBar, env);
-    } catch {
-        vscode.window.showErrorMessage('Conan executable not found.');
-    }
+    } catch {}
 }
