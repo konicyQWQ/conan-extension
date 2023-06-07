@@ -2,13 +2,19 @@
 
 All notable changes to the "conan-extension" extension will be documented in this file.
 
-## [0.0.4] 2023.6.7
+## [0.0.5] - 2023.6.7
+
+### Added
+
+- side bar to show dependencies
+
+## [0.0.4] - 2023.6.7
 
 ### Added
 
 - custom config args for `conan install`
 
-## [0.0.3] 2023.6.4
+## [0.0.3] - 2023.6.4
 
 ### Fix
 

@@ -2,7 +2,7 @@
   "name": "conan-extension",
   "displayName": "conan-extension",
   "description": "conan v2.0 VScode Extension",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "repository": "https://github.com/konicyQWQ/conan-extension",
   "icon": "img/icon.png",
   "publisher": "konicy",
@@ -23,6 +23,23 @@
         "title": "Install Dependencies (conan install ...)"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "conan-extension",
+          "title": "Conan Extension",
+          "icon": "img/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "conan-extension": [
+        {
+          "id": "conanDependencies",
+          "name": "Conan Dependencies"
+        }
+      ]
+    },
     "languages": [
       {
         "id": "conanfile",
@@ -61,16 +78,20 @@
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {
-    "@types/vscode": "^1.78.0",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
+    "@types/vscode": "^1.78.0",
+    "@types/yamljs": "^0.2.31",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
+    "@vscode/test-electron": "^2.3.0",
     "eslint": "^8.39.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
-    "typescript": "^5.0.4",
-    "@vscode/test-electron": "^2.3.0"
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "yamljs": "^0.3.0"
   }
 }

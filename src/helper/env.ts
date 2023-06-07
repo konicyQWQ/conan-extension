@@ -1,9 +1,22 @@
 import path = require('path');
 import * as vscode from 'vscode';
 import { cp_exec } from '../utils';
+import YAML = require('yamljs');
 
 type ConanExtensionConfig = {
     installArgs: Array<string>;
+};
+
+export type ConanfileDependency = {
+    headers: boolean,
+    libs: boolean,
+    ref: string,
+};
+
+export type ConanGraphInfo = {
+    conanfile?: {
+        dependencies?: Record<any, ConanfileDependency>,
+    },
 };
 
 export class Env {
@@ -26,6 +39,22 @@ export class Env {
 
     getConfig<T extends keyof ConanExtensionConfig>(key: T): ConanExtensionConfig[T] | undefined {
         return this.configuration?.get(key);
+    }
+
+    async getConanGraphInfo(): Promise<ConanGraphInfo> {
+        const stdout = await cp_exec('conan graph info . 2>&1', {
+            cwd: this.workspacePath,
+        });
+        const graphYAML = stdout.split(/.*Basic.*graph.*information.*/)[1];
+
+        let json: ConanGraphInfo = {};
+        try {
+            json = YAML.parse(graphYAML);
+        } catch (e) {
+            vscode.window.showErrorMessage(`Load conan graph info failed, ${e}`);
+        }
+
+        return json;
     }
 
     async getConanEnv(context: vscode.ExtensionContext): Promise<boolean> {
