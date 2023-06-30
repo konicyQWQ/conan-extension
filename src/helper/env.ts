@@ -31,6 +31,7 @@ export class Env {
   conanfilePath: string | undefined = undefined;
   conanVersion: string | undefined = undefined;
   configuration: vscode.WorkspaceConfiguration | undefined = undefined;
+  conanGraphInfo: ConanGraphInfo | undefined = undefined;
 
   constructor(context: vscode.ExtensionContext) {
     if (vscode.workspace.workspaceFolders) {
@@ -48,23 +49,30 @@ export class Env {
     return this.configuration?.get(key);
   }
 
-  async getConanGraphInfo(): Promise<ConanGraphInfo> {
+  async refreshConanGraphInfo(): Promise<ConanGraphInfo> {
     const stdout = await cp_exec('conan graph info . 2>&1', {
       cwd: this.workspacePath,
     });
     const graphYAML = stdout.split(/.*Basic.*graph.*information.*/)[1];
 
-    let json: ConanGraphInfo = {};
     try {
-      json = YAML.parse(graphYAML);
+      this.conanGraphInfo = YAML.parse(graphYAML);
     } catch (e) {
       vscode.window.showErrorMessage(`Load conan graph info failed, ${e}`);
+      this.conanGraphInfo = {};
     }
 
-    return json;
+    return this.conanGraphInfo || {};
   }
 
-  async getConanEnv(context: vscode.ExtensionContext): Promise<boolean> {
+  async getConanGraphInfoMemo(): Promise<ConanGraphInfo> {
+    if (this.conanGraphInfo === undefined) {
+      await this.refreshConanGraphInfo();
+    }
+    return this.conanGraphInfo || {};
+  }
+
+  async getConanEnvMemo(context: vscode.ExtensionContext): Promise<boolean> {
     if (this.conanVersion === undefined) {
       try {
         const stdout = await cp_exec('conan --version');

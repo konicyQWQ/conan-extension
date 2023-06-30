@@ -26,13 +26,14 @@ export function activate(context: vscode.ExtensionContext) {
 
     // conan sidebar
     // - show dependency
+    const dependencyDataProvider = new ConanDependenciesProvider(env);
     vscode.window.createTreeView('conanDependencies', {
-        treeDataProvider: new ConanDependenciesProvider(env)
+        treeDataProvider: dependencyDataProvider
     });
 
     // conan command
     // - conan install
-    registerCommand(context, statusBar, env);
+    registerCommand(context, statusBar, env, dependencyDataProvider);
 }
 
 export function deactivate() { }

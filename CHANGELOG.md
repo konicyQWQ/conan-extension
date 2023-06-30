@@ -2,6 +2,12 @@
 
 All notable changes to the "conan-extension" extension will be documented in this file.
 
+## [0.0.7] - 2023.6.30
+
+### Added
+
+- refresh conan dependencies button
+
 ## [0.0.6] - 2023.6.14
 
 ### Added

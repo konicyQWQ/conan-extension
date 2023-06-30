@@ -2,8 +2,10 @@ import * as vscode from 'vscode';
 import { cp_exec } from '../utils';
 import { StatusBar } from './status';
 import { Env } from './env';
+import { ConanDependenciesProvider } from './side';
 
 export const installCommandID = 'conan.install';
+export const refreshDependencies = 'conanDependencies.refreshEntry';
 
 function produceInstallCommandString(path: string, env: Env) {
     const args = env.getConfig('installArgs');
@@ -15,7 +17,7 @@ function registerInstallCommand(context: vscode.ExtensionContext, statusBar: Sta
         if (env.workspacePath && !statusBar.loading) {
             const outputChannel = vscode.window.createOutputChannel('conan install');
             outputChannel.show();
-    
+
             try {
                 statusBar.setStatus({ loading: true });
                 await cp_exec(produceInstallCommandString(env.workspacePath, env), {
@@ -32,9 +34,18 @@ function registerInstallCommand(context: vscode.ExtensionContext, statusBar: Sta
     }));
 }
 
-export async function registerCommand(context: vscode.ExtensionContext, statusBar: StatusBar, env: Env) {
+function registerConanDependenciesCommand(context: vscode.ExtensionContext, dependencyDataProvider: ConanDependenciesProvider) {
+    context.subscriptions.push(vscode.commands.registerCommand(refreshDependencies, async () => {
+        vscode.window.showInformationMessage("refreshing...");
+        await dependencyDataProvider.refresh();
+        vscode.window.showInformationMessage("refresh conan dependencies OK!");
+    }));
+}
+
+export async function registerCommand(context: vscode.ExtensionContext, statusBar: StatusBar, env: Env, dependencyDataProvider: ConanDependenciesProvider) {
     try {
-        await env.getConanEnv(context);
+        await env.getConanEnvMemo(context);
         registerInstallCommand(context, statusBar, env);
-    } catch {}
+        registerConanDependenciesCommand(context, dependencyDataProvider);
+    } catch { }
 }

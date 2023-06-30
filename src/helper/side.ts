@@ -11,17 +11,21 @@ type Item = {
 
 export class ConanDependenciesProvider implements vscode.TreeDataProvider<Item> {
   env: Env;
-  conanGraphInfo: ConanGraphInfo | undefined = undefined;
+
+  private _onDidChangeTreeData: vscode.EventEmitter<Item | undefined | null | void> = new vscode.EventEmitter<Item | undefined | null | void>();
+  readonly onDidChangeTreeData: vscode.Event<Item | undefined | null | void> = this._onDidChangeTreeData.event;
 
   constructor(env: Env) {
     this.env = env;
   }
 
+  async refresh() {
+    await this.env.refreshConanGraphInfo();
+    this._onDidChangeTreeData.fire();
+  }
+
   async getConanGraphInfo() {
-    if (this.conanGraphInfo === undefined) {
-      this.conanGraphInfo = await this.env.getConanGraphInfo();
-    }
-    return this.conanGraphInfo;
+    return await this.env.getConanGraphInfoMemo();
   }
 
   getTreeItem(element: Item): vscode.TreeItem {

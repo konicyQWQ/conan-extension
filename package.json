@@ -2,7 +2,7 @@
   "name": "conan-extension",
   "displayName": "conan-extension",
   "description": "conan v2.0 VScode Extension",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "repository": "https://github.com/konicyQWQ/conan-extension",
   "icon": "img/icon.png",
   "publisher": "konicy",
@@ -21,6 +21,14 @@
       {
         "command": "conan.install",
         "title": "Install Dependencies (conan install ...)"
+      },
+      {
+        "command": "conanDependencies.refreshEntry",
+        "title": "Refresh Conan Dependencies",
+        "icon": {
+          "light": "img/light/refresh.svg",
+          "dark": "img/dark/refresh.svg"
+        }
       }
     ],
     "viewsContainers": {
@@ -37,6 +45,15 @@
         {
           "id": "conanDependencies",
           "name": "Conan Dependencies"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "conanDependencies.refreshEntry",
+          "when": "view == conanDependencies",
+          "group": "navigation"
         }
       ]
     },
